@@ -2,14 +2,13 @@ import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import notificationReducer from './notificationReducer'
+import NotificationContext from './components/NotificationContext'
 import { createAnecdote, getAnecdotes, upvoteAnecdote } from './request'
-import { useReducer, useRef } from 'react'
+import { useReducer, useRef, useContext } from 'react'
 
 const App = () => {
-  const [notification, notificationDispatch] = useReducer(
-    notificationReducer,
-    null
-  )
+  const [notification, notificationDispatch] = useContext(NotificationContext)
+
   const timeoudIdRef = useRef(null)
 
   const queryClient = useQueryClient()
