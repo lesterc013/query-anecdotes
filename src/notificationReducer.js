@@ -9,6 +9,9 @@ const notificationReducer = (state, action) => {
       // Dispatched in handleVote
       return `voted for '${action.payload}'`
     }
+    case 'CLEAR': {
+      return null
+    }
     default:
       return state
   }

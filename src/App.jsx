@@ -8,8 +8,9 @@ import { useReducer } from 'react'
 const App = () => {
   const [notification, notificationDispatch] = useReducer(
     notificationReducer,
-    ''
+    null
   )
+
   const queryClient = useQueryClient()
 
   const result = useQuery({
@@ -50,6 +51,9 @@ const App = () => {
       type: 'VOTE',
       payload: anecdote.content,
     })
+    setTimeout(() => {
+      notificationDispatch({ type: 'CLEAR' })
+    }, 5000)
   }
 
   const handleSubmit = (event) => {
