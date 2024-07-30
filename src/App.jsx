@@ -3,13 +3,14 @@ import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import notificationReducer from './notificationReducer'
 import { createAnecdote, getAnecdotes, upvoteAnecdote } from './request'
-import { useReducer } from 'react'
+import { useReducer, useRef } from 'react'
 
 const App = () => {
   const [notification, notificationDispatch] = useReducer(
     notificationReducer,
     null
   )
+  const timeoudIdRef = useRef(null)
 
   const queryClient = useQueryClient()
 
@@ -51,7 +52,8 @@ const App = () => {
       type: 'VOTE',
       payload: anecdote.content,
     })
-    setTimeout(() => {
+    clearTimeout(timeoudIdRef.current)
+    timeoudIdRef.current = setTimeout(() => {
       notificationDispatch({ type: 'CLEAR' })
     }, 5000)
   }
@@ -69,6 +71,10 @@ const App = () => {
       type: 'ADD',
       payload: content,
     })
+    clearTimeout(timeoudIdRef.current)
+    timeoudIdRef.current = setTimeout(() => {
+      notificationDispatch({ type: 'CLEAR' })
+    }, 5000)
   }
 
   if (result.isLoading) {
