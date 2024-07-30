@@ -15,7 +15,6 @@ const App = () => {
 
   const anecdotes = result.data
 
-  // Passed as prop to AnecdoteForm
   const addAnecdoteMutation = useMutation({
     mutationFn: createAnecdote,
     onSuccess: () => {
@@ -43,6 +42,17 @@ const App = () => {
     upvoteMutation.mutate(upvoted)
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const content = event.target.anecdote.value
+    event.target.anecdote.value = ''
+    console.log('new anecdote')
+    addAnecdoteMutation.mutate({
+      content,
+      votes: 0,
+    })
+  }
+
   if (result.isLoading) {
     return <div>Fetching data...</div>
   } else if (result.isError) {
@@ -54,7 +64,7 @@ const App = () => {
       <h3>Anecdote app</h3>
 
       <Notification />
-      <AnecdoteForm addAnecdoteMutation={addAnecdoteMutation} />
+      <AnecdoteForm handleSubmit={handleSubmit} />
 
       {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
