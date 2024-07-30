@@ -1,10 +1,15 @@
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
+import notificationReducer from './notificationReducer'
 import { createAnecdote, getAnecdotes, upvoteAnecdote } from './request'
 import { useReducer } from 'react'
 
 const App = () => {
+  const [notification, notificationDispatch] = useReducer(
+    notificationReducer,
+    ''
+  )
   const queryClient = useQueryClient()
 
   const result = useQuery({
@@ -61,27 +66,6 @@ const App = () => {
       payload: content,
     })
   }
-
-  const notificationReducer = (state, action) => {
-    switch (action.type) {
-      case 'ADD': {
-        // Should use action.payload to contain the anecdote content
-        // Likely dispatched in handleSubmit
-        return `anecdote '${action.payload}'`
-      }
-      case 'VOTE': {
-        // Dispatched in handleVote
-        return `voted for '${action.payload}'`
-      }
-      default:
-        return state
-    }
-  }
-
-  const [notification, notificationDispatch] = useReducer(
-    notificationReducer,
-    ''
-  )
 
   if (result.isLoading) {
     return <div>Fetching data...</div>
