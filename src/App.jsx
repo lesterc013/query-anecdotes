@@ -1,10 +1,9 @@
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
-import notificationReducer from './notificationReducer'
 import NotificationContext from './components/NotificationContext'
 import { createAnecdote, getAnecdotes, upvoteAnecdote } from './request'
-import { useReducer, useRef, useContext } from 'react'
+import { useRef, useContext } from 'react'
 
 const App = () => {
   const [notification, notificationDispatch] = useContext(NotificationContext)
@@ -28,6 +27,17 @@ const App = () => {
       queryClient.invalidateQueries({
         queryKey: ['anecdotes'],
       })
+    },
+    onError: (error) => {
+      console.log(error.response.data.error)
+      notificationDispatch({
+        type: 'TOO_SHORT',
+        payload: error.response.data.error,
+      })
+      clearTimeout(timeoudIdRef.current)
+      timeoudIdRef.current = setTimeout(() => {
+        notificationDispatch({ type: 'CLEAR' })
+      }, 5000)
     },
   })
 
